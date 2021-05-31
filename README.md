@@ -16,6 +16,6 @@ None at this time! Granted this is a super new extension so this may change..
 
 ## Release Notes
 
-### 1.0.0
+### 0.0.1
 
 Initial release of the Swearaser
