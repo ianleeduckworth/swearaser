@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as assert from 'assert';
 import { getBadWords, splitWithIndex } from '../../utilities/badWords';
 
-suite('diagnostics.ts test suite', () => {
+suite('badWords.ts test suite', () => {
     test('splitWithIndex splits properly with one word', () => {
         const lineOfText = {
             text: 'test'

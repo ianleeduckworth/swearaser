@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { badWords } from '../data/badWords';
+import customFilter from './customFilter';
 import { WordWithIndex } from "../types/diagnostics";
 
 /**
@@ -49,9 +49,9 @@ export function splitWithIndex(lineOfText: vscode.TextLine): WordWithIndex[] {
 
     const splitLine = splitWithIndex(lineOfText);
 
-    for (let splitLineIndex = 0; splitLineIndex < splitLine.length; splitLineIndex++) {
-        const { word, indexInLine } = splitLine[splitLineIndex];
-        if (badWords.find(badWord => badWord.toUpperCase() === word.toUpperCase())) {
+    for (let i = 0; i < splitLine.length; i++) {
+        const { word, indexInLine } = splitLine[i];
+        if (customFilter.isProfane(word)) {
             foundBadWords.push({
                 word,
                 indexInLine: indexInLine,
