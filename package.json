@@ -1,6 +1,7 @@
 {
 	"name": "swearaser",
 	"publisher": "DuckPond",
+	"repository": "https://github.com/ianleeduckworth/swearaser",
 	"displayName": "Swearaser",
 	"description": "",
 	"version": "0.0.1",
