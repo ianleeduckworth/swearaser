@@ -9,6 +9,8 @@ const blackList: string[] = [
     'dangus',
     'dong',
     'poon',
+    'douche',
+    'asshat',
 ];
 
 /**

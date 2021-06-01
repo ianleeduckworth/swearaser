@@ -19,3 +19,7 @@ None at this time! Granted this is a super new extension so this may change..
 ### 0.0.1
 
 Initial release of the Swearaser
+
+### 0.0.2
+
+Updated flagged words list to be more robust
