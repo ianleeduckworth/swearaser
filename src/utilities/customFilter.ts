@@ -8,6 +8,7 @@ const blackList: string[] = [
     'rangus',
     'dangus',
     'dong',
+    'poon',
 ];
 
 /**
@@ -27,7 +28,7 @@ function configure() {
 
 export default {
     isProfane: function(word: string) {
-        const { configComplete } = state; 
+        const { configComplete } = state;
         if (!configComplete) {
             configure();
         }
