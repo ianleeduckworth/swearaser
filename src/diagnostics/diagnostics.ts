@@ -2,11 +2,26 @@ import * as vscode from 'vscode';
 import { WordWithIndex } from '../types/diagnostics';
 import { getBadWords } from '../utilities/badWords';
 
-export function refreshDiagnostics(doc: vscode.TextDocument, swearsDiagnostics: vscode.DiagnosticCollection): void {
+function createDiagnostics(
+	document: vscode.TextDocument, 
+	swearsDiagnostics: vscode.DiagnosticCollection,
+	lineStart?: number | undefined,
+	lineEnd?: number | undefined,
+	): void {
 	let diagnostics: vscode.Diagnostic[] = [];
 
-	for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
-		const lineOfText = doc.lineAt(lineIndex);
+	let lineIndex = 0;
+	if (lineStart) {
+		lineIndex = lineStart;
+	}
+
+	let endValue = document.lineCount;
+	if (lineEnd) {
+		endValue = lineEnd + 1;
+	}
+
+	for (lineIndex; lineIndex < endValue; lineIndex++) {
+		const lineOfText = document.lineAt(lineIndex);
         const badWords = getBadWords(lineOfText);
 
         if (badWords.length > 0) {
@@ -15,7 +30,7 @@ export function refreshDiagnostics(doc: vscode.TextDocument, swearsDiagnostics: 
         }
 	}
 
-	swearsDiagnostics.set(doc.uri, diagnostics);
+	swearsDiagnostics.set(document.uri, diagnostics);
 }
 
 function createDiagnosticsForLine(lineIndex: number, badWords: WordWithIndex[]) {
@@ -38,18 +53,24 @@ function createDiagnosticsForLine(lineIndex: number, badWords: WordWithIndex[]) 
 
 export function subscribeToDocumentChanges(context: vscode.ExtensionContext, swearsDiagnostics: vscode.DiagnosticCollection): void {
 	if (vscode.window.activeTextEditor) {
-		refreshDiagnostics(vscode.window.activeTextEditor.document, swearsDiagnostics);
+		createDiagnostics(vscode.window.activeTextEditor.document, swearsDiagnostics);
 	}
 	context.subscriptions.push(
 		vscode.window.onDidChangeActiveTextEditor(editor => {
 			if (editor) {
-				refreshDiagnostics(editor.document, swearsDiagnostics);
+				createDiagnostics(editor.document, swearsDiagnostics);
 			}
 		})
 	);
 
 	context.subscriptions.push(
-		vscode.workspace.onDidChangeTextDocument(e => refreshDiagnostics(e.document, swearsDiagnostics))
+		vscode.workspace.onDidChangeTextDocument(e => {
+			const { contentChanges, document } = e;
+			for (let i = 0; i < contentChanges.length; i++) {
+				const {start, end } = contentChanges[i].range;
+				createDiagnostics(document, swearsDiagnostics, start.line, end.line);
+			}
+		})
 	);
 
 	context.subscriptions.push(

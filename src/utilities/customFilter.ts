@@ -7,6 +7,7 @@ const customFilter = new Filter();
 const blackList: string[] = [
     'rangus',
     'dangus',
+    'dringus',
     'dong',
     'poon',
     'douche',
